@@ -132,6 +132,16 @@
   line-height: 1.58;
 }
 
+.proof-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.proof-section .recognition-heading { order: 1; margin-top: 0; }
+.proof-section .authority-card-grid { order: 2; }
+.proof-section .leaders-heading { order: 3; margin-top: clamp(72px, 8vw, 112px); }
+.proof-section .client-proof-row { order: 4; }
+
 .story-card.video-launch {
   position: relative;
   display: block;
