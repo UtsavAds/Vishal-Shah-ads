@@ -70,6 +70,79 @@ document.querySelectorAll(".video-launch").forEach((button) => {
   }, {once: true});
 });
 
+const assessmentRanges = document.querySelectorAll(".assessment-range");
+const assessmentScore = document.querySelector("#assessment-score");
+const assessmentMessage = document.querySelector("#assessment-message");
+
+if (assessmentRanges.length && assessmentScore && assessmentMessage) {
+  const updateAssessment = () => {
+    let total = 0;
+
+    assessmentRanges.forEach((range) => {
+      const value = Number(range.value);
+      total += value;
+      const output = range.parentElement?.querySelector("output");
+      if (output) output.value = String(value);
+    });
+
+    assessmentScore.textContent = `${total}/25`;
+
+    if (total <= 10) {
+      assessmentMessage.textContent = "Low dependency. Use the webinar to make your systems even stronger.";
+    } else if (total <= 20) {
+      assessmentMessage.textContent = "Your business needs stronger ownership, systems and follow-through.";
+    } else {
+      assessmentMessage.textContent = "High owner dependency. This webinar will help you choose what to fix first.";
+    }
+  };
+
+  assessmentRanges.forEach((range) => range.addEventListener("input", updateAssessment));
+  updateAssessment();
+}
+
+const galleryButtons = [...document.querySelectorAll(".glimpse-card")];
+const galleryDialog = document.querySelector(".glimpse-lightbox");
+
+if (galleryButtons.length && galleryDialog) {
+  const galleryImage = galleryDialog.querySelector("img");
+  const galleryCount = galleryDialog.querySelector("p");
+  const galleryClose = galleryDialog.querySelector(".glimpse-close");
+  const galleryPrev = galleryDialog.querySelector(".glimpse-prev");
+  const galleryNext = galleryDialog.querySelector(".glimpse-next");
+  let activeGalleryIndex = 0;
+
+  const showGalleryImage = (index) => {
+    activeGalleryIndex = (index + galleryButtons.length) % galleryButtons.length;
+    const sourceImage = galleryButtons[activeGalleryIndex].querySelector("img");
+
+    if (galleryImage && sourceImage) {
+      galleryImage.src = sourceImage.src;
+      galleryImage.alt = sourceImage.alt;
+    }
+
+    if (galleryCount) galleryCount.textContent = `${activeGalleryIndex + 1} of ${galleryButtons.length}`;
+  };
+
+  galleryButtons.forEach((button, index) => {
+    button.addEventListener("click", () => {
+      showGalleryImage(index);
+      if (typeof galleryDialog.showModal === "function") galleryDialog.showModal();
+      else galleryDialog.setAttribute("open", "");
+
+      if (typeof window.fbq === "function") {
+        window.fbq("trackCustom", "WebinarGalleryOpen", {image_number: index + 1});
+      }
+    });
+  });
+
+  galleryClose?.addEventListener("click", () => galleryDialog.close());
+  galleryPrev?.addEventListener("click", () => showGalleryImage(activeGalleryIndex - 1));
+  galleryNext?.addEventListener("click", () => showGalleryImage(activeGalleryIndex + 1));
+  galleryDialog.addEventListener("click", (event) => {
+    if (event.target === galleryDialog) galleryDialog.close();
+  });
+}
+
 const revealItems = document.querySelectorAll(".reveal");
 
 if ("IntersectionObserver" in window) {
