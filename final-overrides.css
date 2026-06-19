@@ -22,11 +22,32 @@
 
 .proof-section .client-proof-row article::after { display: none; }
 
-.proof-section .client-proof-row img {
+.proof-section .client-proof-row img,
+.proof-section .client-proof-row .leader-photo {
   aspect-ratio: 1.5;
   margin-bottom: 36px;
   border-radius: 34px 34px 0 0;
   object-fit: cover;
+}
+
+.proof-section .client-proof-row .leader-photo {
+  width: 100%;
+  background-image: url("assets/business-leaders-correct.png");
+  background-repeat: no-repeat;
+  background-size: 345.2% auto;
+  background-position-y: 13.8%;
+}
+
+.proof-section .client-proof-row .leader-ajay {
+  background-position-x: 2.6%;
+}
+
+.proof-section .client-proof-row .leader-himanshu {
+  background-position-x: 49.4%;
+}
+
+.proof-section .client-proof-row .leader-sanwar {
+  background-position-x: 96.5%;
 }
 
 .proof-section .client-proof-row strong {
@@ -147,7 +168,8 @@
     border-radius: 26px;
   }
 
-  .proof-section .client-proof-row img {
+  .proof-section .client-proof-row img,
+  .proof-section .client-proof-row .leader-photo {
     margin-bottom: 28px;
     border-radius: 26px 26px 0 0;
   }
