@@ -39,9 +39,9 @@ document.querySelectorAll(".video-launch").forEach((button) => {
 
     if (window.location.protocol === "file:") {
       const notice = document.createElement("span");
-      notice.className = "local-video-notice";
-      notice.innerHTML = "<strong>Video is ready for the live website.</strong><span>YouTube blocks players opened directly as a local file. Open this page through localhost or your live domain to play it here without leaving the page.</span>";
-      button.replaceChildren(notice);
+      notice.className = "local-video-badge";
+      notice.textContent = "Video plays here on the live website";
+      button.append(notice);
       button.classList.add("is-local-preview");
       return;
     }
@@ -99,6 +99,83 @@ if (assessmentRanges.length && assessmentScore && assessmentMessage) {
   assessmentRanges.forEach((range) => range.addEventListener("input", updateAssessment));
   updateAssessment();
 }
+
+const countdown = document.querySelector(".mini-countdown[data-countdown-end]");
+
+if (countdown) {
+  const countdownEnd = new Date(countdown.dataset.countdownEnd).getTime();
+  const countdownParts = {
+    days: countdown.querySelector('[data-countdown="days"]'),
+    hours: countdown.querySelector('[data-countdown="hours"]'),
+    minutes: countdown.querySelector('[data-countdown="minutes"]'),
+    seconds: countdown.querySelector('[data-countdown="seconds"]')
+  };
+
+  const updateCountdown = () => {
+    const remaining = Math.max(0, countdownEnd - Date.now());
+    const totalSeconds = Math.floor(remaining / 1000);
+    const values = {
+      days: Math.floor(totalSeconds / 86400),
+      hours: Math.floor((totalSeconds % 86400) / 3600),
+      minutes: Math.floor((totalSeconds % 3600) / 60),
+      seconds: totalSeconds % 60
+    };
+
+    Object.entries(values).forEach(([key, value]) => {
+      if (countdownParts[key]) countdownParts[key].textContent = String(value).padStart(2, "0");
+    });
+
+    if (remaining === 0) {
+      const heading = countdown.querySelector(":scope > strong");
+      if (heading) heading.textContent = "The live webinar is starting now.";
+      window.clearInterval(countdownTimer);
+    }
+  };
+
+  const countdownTimer = window.setInterval(updateCountdown, 1000);
+  updateCountdown();
+}
+
+const counterElements = document.querySelectorAll("[data-counter]");
+
+if (counterElements.length) {
+  const animateCounter = (element) => {
+    const target = Number(element.dataset.counter || 0);
+    const duration = 1100;
+    const startedAt = performance.now();
+
+    const tick = (now) => {
+      const progress = Math.min(1, (now - startedAt) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      element.textContent = Math.round(target * eased).toLocaleString("en-IN");
+      if (progress < 1) window.requestAnimationFrame(tick);
+    };
+
+    window.requestAnimationFrame(tick);
+  };
+
+  if ("IntersectionObserver" in window) {
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target);
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    }, {threshold: 0.7});
+
+    counterElements.forEach((element) => counterObserver.observe(element));
+  } else {
+    counterElements.forEach(animateCounter);
+  }
+}
+
+document.querySelector(".floating-whatsapp")?.addEventListener("click", () => {
+  if (typeof window.fbq === "function") {
+    window.fbq("track", "Contact", {content_name: "Webinar WhatsApp Enquiry"});
+    window.fbq("trackCustom", "WhatsAppClick", {button_location: "floating_site_button"});
+  }
+});
 
 const galleryButtons = [...document.querySelectorAll(".glimpse-card")];
 const galleryDialog = document.querySelector(".glimpse-lightbox");
