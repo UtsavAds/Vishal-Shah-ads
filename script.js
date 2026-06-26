@@ -100,12 +100,30 @@ if (assessmentRanges.length && assessmentScore && assessmentMessage) {
   updateAssessment();
 }
 
-const countdown = document.querySelector(".mini-countdown[data-countdown-end]");
+const countdown = document.querySelector(".mini-countdown[data-countdown-end], .mini-countdown[data-offer-duration-minutes]");
 
 if (countdown) {
-  const countdownEnd = new Date(countdown.dataset.countdownEnd).getTime();
+  const storageKey = "businessSkoolOfferDeadline";
+  const durationMinutes = Number(countdown.dataset.offerDurationMinutes || 0);
+  let countdownEnd = countdown.dataset.countdownEnd ? new Date(countdown.dataset.countdownEnd).getTime() : 0;
+
+  if (durationMinutes > 0) {
+    const now = Date.now();
+    let storedDeadline = 0;
+    try {
+      storedDeadline = Number(window.localStorage.getItem(storageKey) || 0);
+    } catch {
+      storedDeadline = 0;
+    }
+    countdownEnd = storedDeadline > now ? storedDeadline : now + durationMinutes * 60 * 1000;
+    try {
+      window.localStorage.setItem(storageKey, String(countdownEnd));
+    } catch {
+      // Timer still works for the current visit if storage is unavailable.
+    }
+  }
+
   const countdownParts = {
-    days: countdown.querySelector('[data-countdown="days"]'),
     hours: countdown.querySelector('[data-countdown="hours"]'),
     minutes: countdown.querySelector('[data-countdown="minutes"]'),
     seconds: countdown.querySelector('[data-countdown="seconds"]')
@@ -115,8 +133,7 @@ if (countdown) {
     const remaining = Math.max(0, countdownEnd - Date.now());
     const totalSeconds = Math.floor(remaining / 1000);
     const values = {
-      days: Math.floor(totalSeconds / 86400),
-      hours: Math.floor((totalSeconds % 86400) / 3600),
+      hours: Math.floor(totalSeconds / 3600),
       minutes: Math.floor((totalSeconds % 3600) / 60),
       seconds: totalSeconds % 60
     };
