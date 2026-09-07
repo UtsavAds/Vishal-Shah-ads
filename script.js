@@ -1,7 +1,7 @@
 const registrationUrl = document.body.dataset.registrationUrl?.trim();
 
 if (registrationUrl) {
-  document.querySelectorAll('a[href^="https://rzp.io"], a[href="#registration"]').forEach((link) => {
+  document.querySelectorAll("a.cta-button").forEach((link) => {
     link.setAttribute("href", registrationUrl);
     link.setAttribute("target", "_blank");
     link.setAttribute("rel", "noopener");
@@ -11,12 +11,12 @@ if (registrationUrl) {
 
       if (typeof window.fbq === "function") {
         window.fbq("track", "InitiateCheckout", {
-          content_name: "Business Skool ₹99 Webinar",
-          content_category: "Webinar",
-          value: 99,
+          content_name: "Business Skool Ahmedabad Offline Workshop",
+          content_category: "Offline Workshop",
+          value: 1499,
           currency: "INR"
         });
-        window.fbq("trackCustom", "Webinar99ButtonClick", {button_location: location});
+        window.fbq("trackCustom", "WorkshopRegistrationClick", {button_location: location});
       }
     });
   });
@@ -88,11 +88,11 @@ if (assessmentRanges.length && assessmentScore && assessmentMessage) {
     assessmentScore.textContent = `${total}/25`;
 
     if (total <= 10) {
-      assessmentMessage.textContent = "Low dependency. Use the webinar to make your systems even stronger.";
+      assessmentMessage.textContent = "Low dependency. Use the workshop to make your systems even stronger.";
     } else if (total <= 20) {
       assessmentMessage.textContent = "Your business needs stronger ownership, systems and follow-through.";
     } else {
-      assessmentMessage.textContent = "High owner dependency. This webinar will help you choose what to fix first.";
+      assessmentMessage.textContent = "High owner dependency. This workshop will help you choose what to fix first.";
     }
   };
 
@@ -144,7 +144,7 @@ if (countdown) {
 
     if (remaining === 0) {
       const heading = countdown.querySelector(":scope > strong");
-      if (heading) heading.textContent = "The live webinar is starting now.";
+      if (heading) heading.textContent = "Workshop registration is now closing.";
       window.clearInterval(countdownTimer);
     }
   };
@@ -187,13 +187,6 @@ if (counterElements.length) {
   }
 }
 
-document.querySelector(".floating-whatsapp")?.addEventListener("click", () => {
-  if (typeof window.fbq === "function") {
-    window.fbq("track", "Contact", {content_name: "Webinar WhatsApp Enquiry"});
-    window.fbq("trackCustom", "WhatsAppClick", {button_location: "floating_site_button"});
-  }
-});
-
 const galleryButtons = [...document.querySelectorAll(".glimpse-card")];
 const galleryDialog = document.querySelector(".glimpse-lightbox");
 
@@ -224,7 +217,7 @@ if (galleryButtons.length && galleryDialog) {
       else galleryDialog.setAttribute("open", "");
 
       if (typeof window.fbq === "function") {
-        window.fbq("trackCustom", "WebinarGalleryOpen", {image_number: index + 1});
+        window.fbq("trackCustom", "WorkshopGalleryOpen", {image_number: index + 1});
       }
     });
   });

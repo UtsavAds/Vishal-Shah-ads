@@ -4,25 +4,18 @@ const paymentLinkStatus = params.get("razorpay_payment_link_status");
 const successfulPaymentRedirect = Boolean(paymentId) || paymentLinkStatus === "paid";
 
 if (successfulPaymentRedirect && typeof window.fbq === "function") {
-  window.fbq("track", "CompleteRegistration", {
-    content_name: "Business Skool ₹99 Webinar",
+  const workshop = {
+    content_name: "Business Skool Ahmedabad Offline Workshop",
+    content_category: "Offline Workshop",
     status: true,
-    value: 99,
+    value: 1499,
     currency: "INR"
-  });
-  window.fbq("track", "Purchase", {
-    content_name: "Business Skool ₹99 Webinar",
-    value: 99,
-    currency: "INR"
-  });
-  window.fbq("trackCustom", "WebinarRegistrationSuccess", {
-    payment_id_present: Boolean(paymentId)
+  };
+
+  window.fbq("track", "CompleteRegistration", workshop);
+  window.fbq("track", "Purchase", workshop);
+  window.fbq("trackCustom", "WorkshopRegistrationSuccess", {
+    payment_id_present: Boolean(paymentId),
+    workshop_city: "Ahmedabad"
   });
 }
-
-document.querySelector("#whatsapp-button")?.addEventListener("click", () => {
-  if (typeof window.fbq === "function") {
-    window.fbq("track", "Contact", {content_name: "Webinar WhatsApp Support"});
-    window.fbq("trackCustom", "WhatsAppClick", {page: "thankyou"});
-  }
-});
