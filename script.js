@@ -13,10 +13,17 @@ if (registrationUrl) {
         window.fbq("track", "InitiateCheckout", {
           content_name: "Business Skool Ahmedabad Offline Workshop",
           content_category: "Offline Workshop",
+          content_ids: ["business-skool-ahmedabad-workshop-2026"],
+          content_type: "product",
+          num_items: 1,
           value: 1499,
           currency: "INR"
         });
-        window.fbq("trackCustom", "WorkshopRegistrationClick", {button_location: location});
+        window.fbq("trackCustom", "WorkshopRegistrationClick", {
+          button_location: location,
+          destination: registrationUrl,
+          workshop_city: "Ahmedabad"
+        });
       }
     });
   });
@@ -49,7 +56,7 @@ document.querySelectorAll(".video-launch").forEach((button) => {
     const iframe = document.createElement("iframe");
     const liveOrigin = window.location.protocol === "http:" || window.location.protocol === "https:"
       ? window.location.origin
-      : "https://lead.businessschool.in";
+      : "https://businessskool.co.in";
     const playerParams = new URLSearchParams({
       autoplay: "1",
       rel: "0",

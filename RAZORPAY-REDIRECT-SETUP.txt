@@ -1,0 +1,25 @@
+RAZORPAY SUCCESS REDIRECT - REQUIRED PRODUCTION SETTING
+
+Payment page:
+https://pages.razorpay.com/pl_TZ5RxkisqkRNM5/view
+
+Set the payment link's successful-payment callback/redirect URL to:
+https://businessskool.co.in/thankyou/
+
+Use GET as the callback method.
+
+The included thank-you page records Meta Pixel CompleteRegistration and Purchase
+only when Razorpay returns both a payment ID and a paid payment-link status.
+
+After uploading the website and configuring the Razorpay redirect, complete one
+real or Razorpay-approved test payment. Confirm that the resulting URL includes:
+- razorpay_payment_id
+- razorpay_payment_link_status=paid
+
+Then verify PageView, CompleteRegistration and Purchase in Meta Events Manager's
+Test Events screen. CTA clicks on the landing page record InitiateCheckout and the
+custom WorkshopRegistrationClick event.
+
+Important: A static browser page cannot securely validate Razorpay's signature.
+For server-verified purchase reporting, add a backend/webhook verification step
+using the Razorpay account secret before sending a server-side Meta event.
